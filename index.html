@@ -94,7 +94,7 @@
     @media print{
       header, #video, #theorie, #erklaerung, .hide-print, .bar .btn-secondary { display:none !important; }
       #grafik { display:none !important; }
-      #quiz-results, #cornell { display:block !important; }
+      #quiz-results, #sc-results, #cornell { display:block !important; } /* <-- Single-Choice-Ergebnisse mitdrucken */
       body{background:#fff;color:#000}
       .card{box-shadow:none;border-color:var(--print-border)}
       a{color:#000;text-decoration:none}
@@ -126,14 +126,14 @@
             <div class="video card" aria-label="Eingebettetes Erklärvideo des BFS zu Bevölkerungsszenarien">
               <iframe
                 src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
-                title="BFS-Bevölkerungsszenarien"
+                title="YouTube video player"
                 referrerpolicy="strict-origin-when-cross-origin"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen>
-              </iframe>
+                allowfullscreen></iframe>
             </div>
             <p class="note">
-              Wird das Video blockiert? <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
+              Wird das Video blockiert?
+              <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
             </p>
           </div>
         </div>
@@ -329,7 +329,7 @@
       </div>
     </section>
 
-    <!-- Ergebnisse für den PDF-Druck -->
+    <!-- Ergebnisse für den PDF-Druck: Offene Fragen -->
     <section id="quiz-results" style="display:none">
       <div class="grid">
         <div class="card two-40-60">
@@ -337,6 +337,19 @@
             <span class="pill">Ergebnisse</span>
             <h2>Auswertung – Offene Fragen</h2>
             <div id="results-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ergebnisse für den PDF-Druck: Single-Choice (NEU) -->
+    <section id="sc-results" style="display:none">
+      <div class="grid">
+        <div class="card two-40-60">
+          <div class="pad">
+            <span class="pill">Ergebnisse</span>
+            <h2>Auswertung – Single‑Choice</h2>
+            <div id="sc-results-container"></div>
           </div>
         </div>
       </div>
@@ -445,6 +458,8 @@
 
       const resultsSection = document.getElementById("quiz-results");
       const resultsContainer = document.getElementById("results-container");
+      const scResultsSection = document.getElementById("sc-results");
+      const scResultsContainer = document.getElementById("sc-results-container");
 
       function checkKeywords(text, needed) {
         const t = (text || "").toLowerCase().normalize("NFKD");
@@ -461,6 +476,7 @@
       }
       function getVal(id){ return document.getElementById(id)?.value?.trim() || "" }
 
+      /* Offene Fragen: Einzelprüfung */
       function checkOne(n){
         const ans = ANSWERS[n];
         const field = document.getElementById("q"+n);
@@ -470,7 +486,7 @@
         updateResults();
       }
 
-      // Delegation: Offene-Fragen-Buttons
+      /* Delegation: Buttons der offenen Fragen */
       document.addEventListener('click', (e) => {
         const btn = e.target.closest('button[data-check]');
         if (!btn) return;
@@ -488,6 +504,7 @@
         });
       }
 
+      /* Offene Fragen: PDF-Block befüllen */
       function updateResults(){
         if (!resultsContainer) return;
         const rows = [1,2,3,4,5].map(n=>{
@@ -510,21 +527,51 @@
         if (resultsSection) resultsSection.style.display = "block";
       }
 
-      const resetBtn = document.getElementById("reset");
-      if (resetBtn) {
-        resetBtn.addEventListener("click", ()=>{
-          document.querySelectorAll('textarea, input[type="text"]').forEach(el => { el.value = ''; });
-          document.querySelectorAll('.feedback').forEach(el => {
-            el.style.display='none'; el.classList.remove("fb-ok","fb-bad"); el.innerHTML='';
-          });
-          if (resultsSection) resultsSection.style.display = "none";
-          if (resultsContainer) resultsContainer.innerHTML = "";
-          window.scrollTo({top:0, behavior:"smooth"});
-        });
+      /* Single-Choice: PDF-Block befüllen (NEU) */
+      function updateSCResults(){
+        if (!scResultsContainer) return;
+
+        const items = Array.from(document.querySelectorAll('#sc-quiz .quiz-item'));
+        const blocks = items.map((item, idx) => {
+          const qNumber = idx + 1;
+          const qText = item.querySelector('p')?.innerText?.trim() || `Frage ${qNumber}`;
+          const correct = item.getAttribute('data-correct');
+          const selected = item.querySelector('input[type="radio"]:checked');
+          const explain = item.querySelector('.sc-explain')?.innerHTML || '';
+          const selectedVal = selected ? selected.value : null;
+
+          // Ausgewählten Antworttext ermitteln
+          let selectedLabelText = '– (keine Auswahl) –';
+          if (selected) {
+            const label = selected.closest('label');
+            if (label) {
+              // Labeltext ohne Input anzeigen
+              selectedLabelText = label.innerText.replace(/\s+/g,' ').trim();
+            }
+          }
+
+          const ok = !!selected && selectedVal === correct;
+          const verdict = ok ? "Richtig" : (selected ? "Falsch" : "Keine Auswahl");
+
+          // Nur wenn falsch: Begründung mitsamt Korrektur einblenden
+          const correctionHtml = ok
+            ? ""
+            : (selected ? `<div class="sc-explain" style="display:block;margin-top:8px">${explain}</div>` : "");
+
+          return `
+            <div class="card" style="margin:8px 0;background:#fff">
+              <div class="pad">
+                <div style="font-weight:700;margin-bottom:6px">Frage ${qNumber}</div>
+                <div style="margin-bottom:6px"><em>Fragetext:</em> ${qText}</div>
+                <div><em>Gewählt:</em> ${selectedLabelText}</div>
+                <div style="margin-top:8px"><strong>Ergebnis:</strong> ${verdict}</div>
+                ${correctionHtml}
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        scResultsContainer.innerHTML = blocks;
+        if (scResultsSection) scResultsSection.style.display = 'block';
       }
 
-      window.addEventListener("beforeprint", ()=>{ updateResults(); });
-    });
-  </script>
-</body>
-</html>
