@@ -94,7 +94,7 @@
     @media print{
       header, #video, #theorie, #erklaerung, .hide-print, .bar .btn-secondary { display:none !important; }
       #grafik { display:none !important; }
-      #quiz-results, #sc-results, #cornell { display:block !important; } /* <-- Single-Choice-Ergebnisse mitdrucken */
+      #quiz-results, #sc-results, #cornell { display:block !important; } /* Single-Choice-Ergebnisse mitdrucken */
       body{background:#fff;color:#000}
       .card{box-shadow:none;border-color:var(--print-border)}
       a{color:#000;text-decoration:none}
@@ -126,14 +126,13 @@
             <div class="video card" aria-label="Eingebettetes Erklärvideo des BFS zu Bevölkerungsszenarien">
               <iframe
                 src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
-                title="YouTube video player"
-                referrerpolicy="strict-origin-when-cross-origin"
+                title="BFS: Bevölkerungsszenarien"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
                 allowfullscreen></iframe>
             </div>
             <p class="note">
-              Wird das Video blockiert?
-              <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
+              Wird das Video blockiert? <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
             </p>
           </div>
         </div>
@@ -342,7 +341,7 @@
       </div>
     </section>
 
-    <!-- Ergebnisse für den PDF-Druck: Single-Choice (NEU) -->
+    <!-- Ergebnisse für den PDF-Druck: Single-Choice -->
     <section id="sc-results" style="display:none">
       <div class="grid">
         <div class="card two-40-60">
@@ -395,6 +394,7 @@
     'use strict';
 
     document.addEventListener('DOMContentLoaded', () => {
+
       /* ========= Single-Choice (Event Delegation) ========= */
       const scContainer = document.getElementById('sc-quiz');
       if (scContainer) {
@@ -545,7 +545,6 @@
           if (selected) {
             const label = selected.closest('label');
             if (label) {
-              // Labeltext ohne Input anzeigen
               selectedLabelText = label.innerText.replace(/\s+/g,' ').trim();
             }
           }
@@ -575,3 +574,37 @@
         if (scResultsSection) scResultsSection.style.display = 'block';
       }
 
+      /* Reset-Knopf */
+      const resetBtn = document.getElementById("reset");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", ()=>{
+          // Offene Fragen
+          document.querySelectorAll('textarea, input[type="text"]').forEach(el => { el.value = ''; });
+          document.querySelectorAll('.feedback').forEach(el => {
+            el.style.display='none'; el.classList.remove("fb-ok","fb-bad"); el.innerHTML='';
+          });
+          if (resultsSection) resultsSection.style.display = "none";
+          if (resultsContainer) resultsContainer.innerHTML = "";
+
+          // Single-Choice
+          document.querySelectorAll('#sc-quiz .quiz-item').forEach(item=>{
+            item.classList.remove('ok-card','bad-card');
+            item.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+            const ex = item.querySelector('.sc-explain'); if (ex) ex.style.display = 'none';
+          });
+          if (scResultsSection) scResultsSection.style.display = "none";
+          if (scResultsContainer) scResultsContainer.innerHTML = "";
+
+          window.scrollTo({top:0, behavior:"smooth"});
+        });
+      }
+
+      /* Beim Drucken: beide Ergebnisblöcke aktualisieren */
+      window.addEventListener("beforeprint", ()=>{
+        updateResults();     // Offene Fragen
+        updateSCResults();   // Single-Choice
+      });
+    });
+  </script>
+</body>
+</html>
