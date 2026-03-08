@@ -6,6 +6,9 @@
   <title>Bevölkerungsentwicklung & Schmetterlingsgrafik (Alterspyramide)</title>
   <meta name="description" content="Erklärseite zur Schmetterlingsgrafik (Alterspyramide) der Bevölkerungsstatistik: Video, Theorie, interaktive BFS-Grafik (Widget), Interpretation, Single-Choice-Quiz, offene Fragen, Cornell-Methode mit PDF-Export." />
 
+  <!-- WICHTIG: Referrer-Policy für stabile YouTube-Embeds -->
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
   <style>
     :root{
       /* Light Theme */
@@ -49,10 +52,10 @@
     /* Media containers */
     iframe, img{max-width:100%;display:block;border:0}
 
-    /* YouTube – 16:9, responsive */
+    /* YouTube – 16:9, responsive mit srcdoc-Fallback */
     .video{ position:relative; width:100%; }
     .video::before{ content:""; display:block; padding-top:56.25%; } /* 16:9 */
-    .video > iframe{ position:absolute; inset:0; width:100%; height:100%; }
+    .video > iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
 
     /* Interaktives BFS-Widget: viel Höhe, kein Cropping */
     .bfs-embed{
@@ -155,7 +158,7 @@
 
   <main class="wrap">
 
-    <!-- 1) Video (korrekt eingebettet) -->
+    <!-- 1) Video (stabil eingebettet mit Referrer-Policy + srcdoc-Fallback) -->
     <section id="video">
       <div class="grid">
         <div class="card two-40-60">
@@ -166,13 +169,35 @@
           <div class="pad" style="padding-top:0">
             <div class="video card" aria-label="Eingebettetes Erklärvideo des BFS zu Bevölkerungsszenarien">
               <iframe
-                src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
-                title="Bevölkerungsszenarien des BFS"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                title="BFS: Bevölkerungsszenarien 2025–2055"
+                loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen></iframe>
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen
+                src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
+                srcdoc="
+                  <style>*{padding:0;margin:0;overflow:hidden}html,body{height:100%}
+                  .wrap{position:relative;height:100%;font-family:system-ui,Segoe UI,Arial,sans-serif}
+                  img, a{position:absolute;left:0;top:0;width:100%;height:100%}
+                  img{object-fit:cover}
+                  .cta{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+                    background:rgba(0,0,0,.55);color:#fff;padding:.6rem .9rem;border-radius:8px;font-size:1rem}
+                  .brand{position:absolute;left:12px;bottom:12px;background:rgba(0,0,0,.45);color:#fff;font-size:.8rem;padding:.25rem .45rem;border-radius:6px}
+                  </style>
+                  <div class='wrap'>
+                    <a href='https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI?autoplay=1' target='_parent' aria-label='Video abspielen'>
+                      <img src='https://i.ytimg.com/vi_webp/vkWtNt-Y6PI/maxresdefault.webp' alt='BFS: Bevölkerungsszenarien – Vorschaubild'>
+                      <span class='cta'>▶ Video abspielen</span>
+                    </a>
+                    <div class='brand'>Quelle: BFS (YouTube)</div>
+                  </div>
+                ">
+              </iframe>
             </div>
-            <p class="note">Quelle: Bundesamt für Statistik (BFS) – offizielles Video zu Bevölkerungsszenarien (YouTube).</p>
+            <p class="note">
+              Falls deine Umgebung YouTube komplett blockiert: Öffne das Video direkt auf YouTube
+              (<a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener noreferrer">Link</a>).
+            </p>
           </div>
         </div>
       </div>
@@ -206,7 +231,7 @@
       </div>
     </section>
 
-    <!-- 3) Interaktive BFS-Grafik (Widget) – ohne Standbild -->
+    <!-- 3) Interaktive BFS-Grafik (Widget) -->
     <section id="grafik">
       <div class="grid">
         <div class="card two-40-60">
@@ -217,7 +242,6 @@
           </div>
 
           <div class="pad" style="padding-top:0">
-            <!-- Interaktives Widget – Container steuert die Höhe -->
             <div class="bfs-embed" aria-label="Interaktive BFS-Visualisierung Alterspyramide">
               <div class="bfsviz-widget"
                    data-vizid="gd-01.03.01-012"
@@ -232,7 +256,7 @@
       </div>
     </section>
 
-    <!-- 4) Erklärung + Quiz -->
+    <!-- 4) Erklärung + Quiz (Single-Choice vor offenen Fragen) -->
     <section id="erklaerung">
       <div class="grid">
         <div class="card two-50-50">
@@ -260,14 +284,14 @@
             </p>
           </div>
 
-          <!-- === NEU: SINGLE-CHOICE-BLOCK (vor den offenen Fragen) === -->
+          <!-- Single-Choice-Block (bereits integriert) -->
           <div class="pad" id="quiz-single">
             <span class="pill">Single‑Choice</span>
             <h2>5 Single‑Choice‑Fragen zur Interpretation</h2>
             <p class="note">Beantworte die 5 Fragen. Nach der Überprüfung werden falsche Antworten korrigiert und kurz begründet.</p>
 
             <div class="card pad" id="sc-quiz" style="background:#fff">
-              <!-- Frage 1 -->
+              <!-- F1 -->
               <div class="quiz-item" data-correct="c" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">1) Wofür steht die <strong>dünne schwarze Linie</strong> in der Grafik?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -289,7 +313,7 @@
                 </div>
               </div>
 
-              <!-- Frage 2 -->
+              <!-- F2 -->
               <div class="quiz-item" data-correct="b" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">2) Nenne die <strong>drei Grundszenarien</strong> mit Codes.</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -310,7 +334,7 @@
                 </div>
               </div>
 
-              <!-- Frage 3 -->
+              <!-- F3 -->
               <div class="quiz-item" data-correct="a" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">3) Welche <strong>drei demografischen Komponenten</strong> bestimmen die Szenarien?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -331,7 +355,7 @@
                 </div>
               </div>
 
-              <!-- Frage 4 -->
+              <!-- F4 -->
               <div class="quiz-item" data-correct="b" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">4) Welches Szenario führt bis 2055 zum <strong>stärksten Bevölkerungswachstum</strong> – und warum?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -352,7 +376,7 @@
                 </div>
               </div>
 
-              <!-- Frage 5 -->
+              <!-- F5 -->
               <div class="quiz-item" data-correct="c" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">5) Wie verändert sich die <strong>Form</strong> bis 2055 in allen Szenarien grob?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -380,9 +404,9 @@
               </div>
             </div>
           </div>
-          <!-- === /NEU === -->
+          <!-- /Single-Choice -->
 
-          <!-- (bestehend) OFFENE FRAGEN -->
+          <!-- Offene Fragen -->
           <div class="pad" id="quiz">
             <span class="pill">Offene Fragen</span>
             <h2>5 offene Fragen zur Interpretation (mit Lösungskontrolle)</h2>
@@ -432,4 +456,214 @@
     </section>
 
     <!-- Ergebnisse für den PDF-Druck -->
+    <section id="quiz-results" style="display:none">
+      <div class="grid">
+        <div class="card two-40-60">
+          <div class="pad">
+            <span class="pill">Ergebnisse</span>
+            <h2>Auswertung – Offene Fragen</h2>
+            <div id="results-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- 6) Cornell-Methode -->
+    <section id="cornell">
+      <div class="grid">
+        <div class="card two-40-60">
+          <div class="pad">
+            <span class="pill">Cornell‑Methode</span>
+            <h2>Eigene Zusammenfassung (Cornell‑Methode / „Cornelmethode“)</h2>
+            <p class="note">Links: Stichworte/Fragen (Cue). Rechts: ausführliche Notizen. Unten: Kurz‑Zusammenfassung in 3–5 Sätzen.</p>
+
+            <div class="cornell">
+              <div class="column">
+                <h3>💡 Stichworte / Fragen (Cue)</h3>
+                <textarea id="cue" placeholder="Zentrale Begriffe, Fragen, Begriffsdefinitionen …"></textarea>
+              </div>
+              <div class="column">
+                <h3>📝 Notizen</h3>
+                <textarea id="notes" placeholder="Ausführliche Notizen, Beispiele, Beobachtungen aus der Grafik …" style="min-height:280px"></textarea>
+              </div>
+              <div class="column summary">
+                <h3>🧾 Zusammenfassung (3–5 Sätze)</h3>
+                <textarea id="summary" placeholder="Das Wichtigste in Kürze …"></textarea>
+              </div>
+            </div>
+
+            <div class="bar">
+              <button class="btn btn-accent" onclick="window.print()">Als PDF exportieren</button>
+              <button class="btn btn-secondary hide-print" id="reset">Felder leeren</button>
+            </div>
+
+            <p class="note hide-print">Tipp: <kbd>Strg/Cmd</kbd> + <kbd>P</kbd> → „Als PDF speichern“.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BFS Widget-Script (einmalig, async – korrekt eingebunden) -->
+  <script async src="https://viz.bfs.admin.ch/libs/viz-bfs/dynvis/dynvis-v0.8/widget-v1.4/widget.js"></script>
+
+  <script>
+    /* === Single-Choice-Auswertung === */
+    (function(){
+      const scContainer = document.getElementById('sc-quiz');
+      if(!scContainer) return;
+
+      const btnCheck = document.getElementById('sc-check');
+      const btnReset = document.getElementById('sc-reset');
+      const result   = document.getElementById('sc-result');
+
+      window.scStatus = { completed:false, score:0, details:[] };
+
+      function evaluate(){
+        const items = scContainer.querySelectorAll('.quiz-item');
+        let score = 0; const details = [];
+
+        items.forEach((item, idx) => {
+          const correct = item.getAttribute('data-correct');
+          const name = item.querySelector('input[type="radio"]')?.name;
+          const selected = name ? scContainer.querySelector(`input[name="${name}"]:checked`) : null;
+          const explain = item.querySelector('.sc-explain');
+
+          item.classList.remove('ok-card','bad-card');
+          if(explain) explain.classList.add('hidden');
+
+          let ok = false;
+          if(selected && selected.value === correct){
+            ok = true; score++;
+            item.classList.add('ok-card');
+          }else{
+            item.classList.add('bad-card');
+            if(explain) explain.classList.remove('hidden');
+          }
+
+          const qText = item.querySelector('p')?.innerText ?? `Frage ${idx+1}`;
+          details.push({ question:qText, isCorrect:ok, correction: explain?.innerHTML ?? '' });
+        });
+
+        window.scStatus = { completed:true, score, details };
+
+        result.style.display = 'block';
+        result.classList.remove('fb-ok','fb-bad');
+        if(score === items.length){
+          result.textContent = `Perfekt! ${score} von ${items.length} richtig.`;
+          result.classList.add('fb-ok');
+        }else{
+          result.textContent = `Du hast ${score} von ${items.length} richtig. Sieh dir die blauen Kästen mit Begründungen an.`;
+          result.classList.add('fb-bad');
+        }
+
+        const firstError = scContainer.querySelector('.quiz-item.bad-card');
+        if(firstError){ firstError.scrollIntoView({behavior:'smooth', block:'center'}); }
+      }
+
+      function resetSC(){
+        scContainer.querySelectorAll('.quiz-item').forEach(item=>{
+          item.classList.remove('ok-card','bad-card');
+          item.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+          item.querySelector('.sc-explain')?.classList.add('hidden');
+        });
+        result.style.display = 'none';
+        result.textContent = '';
+        window.scStatus = { completed:false, score:0, details:[] };
+      }
+
+      btnCheck?.addEventListener('click', evaluate);
+      btnReset?.addEventListener('click', resetSC);
+    })();
+
+    /* === Offene Fragen – Logik === */
+    const ANSWERS = {
+      1: {
+        keywords: ["referenz", "2025", "kontur", "linie", "vergleich", "referenzkontur","startform","heute"],
+        correct:
+          "Die dünne schwarze Linie zeigt, wie die Altersverteilung in der Schweiz <strong>heute</strong> (im Jahr <strong>2025</strong>) aussieht. Sie ist die <strong>Startform</strong> der Bevölkerung. Die farbigen Flächen zeigen, wie die Bevölkerung <strong>2055</strong> aussehen könnte. So kannst du direkt vergleichen, wo es in Zukunft <strong>mehr oder weniger</strong> junge, erwachsene oder ältere Menschen geben könnte. Kurz: Die schwarze Linie ist der <strong>Vergleichspunkt zwischen heute und der Zukunft</strong>.",
+        explain:
+          "Mit der Startform (2025) als Referenz kannst du die Verschiebungen der Pyramide bis 2055 einfach erkennen."
+      },
+      2: {
+        keywords: ["a-00-2025", "b-00-2025", "c-00-2025", "referenz", "hoch", "tief"],
+        correct:
+          "Die drei Grundszenarien sind: <strong>Referenz A‑00‑2025</strong>, <strong>hohes B‑00‑2025</strong>, <strong>tiefes C‑00‑2025</strong>.",
+        explain:
+          "Sie unterscheiden sich durch kombinierte Annahmen zu Geburten, Sterblichkeit und Migration."
+      },
+      3: {
+        keywords: ["geburten", "sterblichkeit", "lebenserwartung", "migration", "einwanderung", "auswanderung"],
+        correct:
+          "Die drei demografischen Komponenten: <strong>Geburten</strong>, <strong>Sterblichkeit (Lebenserwartung)</strong>, <strong>Migration (Ein-/Auswanderung)</strong>.",
+        explain:
+          "Diese Komponenten bestimmen Größe und Altersstruktur der Bevölkerung und bilden die Grundlage der Szenarien."
+      },
+      4: {
+        keywords: ["b-00-2025", "hoch", "höher", "stärkstes", "stärkeren", "wachstum"],
+        correct:
+          "Das <strong>hohe Szenario (B‑00‑2025)</strong> – mit höheren Annahmen bei Geburten, Lebenserwartung und Nettozuwanderung – führt zum stärksten Wachstum.",
+        explain:
+          "Alle drei Komponenten wirken in Richtung größerer Bevölkerung, wodurch die Pyramide breiter (v. a. Basis/Mitte) ausfällt."
+      },
+      5: {
+        keywords: ["urne", "tanne", "verbreitert", "spitze", "alterung"],
+        correct:
+          "Die Form verschiebt sich von der <strong>Tanne</strong> zur <strong>Urne</strong>: Die Spitze verbreitert sich – Zeichen einer <strong>raschen Alterung</strong> der Bevölkerung.",
+        explain:
+          "Babyboom‑Kohorten rücken in höhere Alter, zugleich steigt die Lebenserwartung."
+      }
+    };
+
+    function checkKeywords(text, needed) {
+      const t = (text || "").toLowerCase().normalize("NFKD");
+      let hits = 0;
+      for (const k of needed) { if (t.includes(k)) hits++; }
+      return hits >= Math.min(2, needed.length);
+    }
+    function renderFeedback(el, ok, correct, explain) {
+      el.style.display = "block";
+      el.classList.toggle("fb-ok", ok);
+      el.classList.toggle("fb-bad", !ok);
+      el.innerHTML = ok
+        ? "✅ <strong>Richtig!</strong> Gut erkannt."
+        : `❌ <strong>Nicht ganz.</strong><br>Richtig ist: ${correct}<div class="explain">${explain}</div>`;
+    }
+    function getVal(id){ return document.getElementById(id)?.value?.trim() || "" }
+    function checkOne(n){
+      const ans = ANSWERS[n];
+      const field = document.getElementById("q"+n);
+      const fb = document.getElementById("fb"+n);
+      const ok = checkKeywords(field.value, ans.keywords);
+      renderFeedback(fb, ok, ans.correct, ans.explain);
+      updateResults();
+    }
+    document.getElementById("check-all")?.addEventListener("click", () => {
+      [1,2,3,4,5].forEach(checkOne);
+      document.getElementById("quiz-results").style.display = "block";
+      window.scrollTo({top: document.getElementById("quiz-results").offsetTop - 20, behavior: "smooth"});
+    });
+    document.querySelectorAll("button[data-check]").forEach(btn=>{
+      btn.addEventListener("click", ()=> checkOne(parseInt(btn.getAttribute("data-check"), 10)));
+    });
+    function updateResults(){
+      const rc = document.getElementById("results-container");
+      const rows = [1,2,3,4,5].map(n=>{
+        const val = getVal("q"+n);
+        const ok = checkKeywords(val, ANSWERS[n].keywords);
+        const verdict = ok ? "Richtig" : "Korrigiert";
+        const correct = ok ? "" : `<div><em>Lösung:</em> ${ANSWERS[n].correct}<div class="explain">${ANSWERS[n].explain}</div></div>`;
+        return `
+          <div class="card" style="margin:8px 0;background:#fff">
+            <div class="pad">
+              <div style="font-weight:700;margin-bottom:6px">Frage ${n}</div>
+              <div><em>Deine Antwort:</em><br).forEach(el => { el.style.display='none'; el.classList.remove("fb-ok","fb-bad"); el.innerHTML=''; });
+      document.getElementById("quiz-results").style.display = "none";
+      document.getElementById("results-container").innerHTML = "";
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+    window.addEventListener("beforeprint", ()=>{ updateResults(); });
+  </script>
+</body>
+</html>
