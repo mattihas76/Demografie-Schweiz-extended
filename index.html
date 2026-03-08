@@ -4,10 +4,9 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bevölkerungsentwicklung & Schmetterlingsgrafik (Alterspyramide)</title>
-  <meta name="description" content="Erklärseite zur Schmetterlingsgrafik (Alterspyramide) der Bevölkerungsstatistik: Video, Theorie, interaktive BFS-Grafik (Widget), Interpretation, Single-Choice-Quiz, offene Fragen, Cornell-Methode mit PDF-Export." />
-
-  <!-- Referrer-Policy für stabile YouTube-Embeds -->
-  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="description" content="Video, Theorie, interaktive BFS-Grafik (Widget), Single-Choice-Quiz mit 'Antwort prüfen', offene Fragen, Cornell-Methode mit PDF-Export." />
+  <!-- Für stabilere YouTube-Einbettung -->
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
 
   <style>
     :root{
@@ -15,7 +14,6 @@
       --shadow:0 10px 26px rgba(0,0,0,.07); --radius:14px; --radius-sm:10px; --max:1200px;
       --print-border:#cfd7e3;
     }
-
     *{box-sizing:border-box}
     html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;line-height:1.55}
@@ -128,10 +126,11 @@
             <div class="video card" aria-label="Eingebettetes Erklärvideo des BFS zu Bevölkerungsszenarien">
               <iframe
                 src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
-                title="BFS: Bevölkerungsszenarien 2025–2055"
+                title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen></iframe>
+                allowfullscreen
+              ></iframe>
             </div>
             <p class="note">
               Wird das Video blockiert? <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
@@ -150,7 +149,7 @@
             <h2>Bevölkerungsentwicklung – zentrale Bausteine und die Rolle von Szenarien</h2>
             <div class="cols">
               <div>
-                <p>Die Bevölkerungsentwicklung wird durch drei demografische Komponenten bestimmt: <strong>Geburten</strong>, <strong>Sterblichkeit</strong> und <strong>Migration</strong>. Alterspyramiden (&laquo;Schmetterlingsgrafiken&raquo;) zeigen die Struktur nach Altersjahren und Geschlecht (Männer links, Frauen rechts).</p>
+                <p>Die Bevölkerungsentwicklung wird durch drei demografische Komponenten bestimmt: <strong>Geburten</strong>, <strong>Sterblichkeit</strong> und <strong>Migration</strong>. Alterspyramiden („Schmetterlingsgrafiken“) zeigen die Struktur nach Altersjahren und Geschlecht (Männer links, Frauen rechts).</p>
                 <p>Das BFS veröffentlicht für 2025–2055 drei <strong>Grundszenarien</strong>: <em>Referenz (A‑00‑2025)</em>, <em>hoch (B‑00‑2025)</em>, <em>tief (C‑00‑2025)</em>. Sie unterscheiden sich durch kombinierte Annahmen zu Geburten, Sterblichkeit und Migration.</p>
               </div>
               <div class="card pad" style="background:#fff">
@@ -202,13 +201,253 @@
             <h2>Die Schmetterlingsgrafik lesen &amp; interpretieren</h2>
 
             <h3>1) Was sagt die Grafik aus?</h3>
-            <p>Die Grafik zeigt die Altersstruktur der ständigen Wohnbevölkerung – einmal für <strong>2025</strong> (Referenzkontur) und für <strong>2055</strong> in drei <em>Grundszenarien</em>. Sichtbar ist die erwartete <strong>Alterung</strong>: Die Spitze verbreitert sich (Babyboom‑Kohorten rücken nach oben; steigende Lebenserwartung). Die Basis kann je nach Geburtenannahmen variieren.</p>
+            <p>Die Grafik zeigt die Altersstruktur der ständigen Wohnbevölkerung – einmal für <strong>2025</strong> (Referenzkontur) und für <strong>2055</strong> in drei <em>Grundszenarien</em>. Sichtbar ist die erwartete <strong>Alterung</strong>: Die Spitze verbreitert sich; die Basis kann je nach Geburten variieren.</p>
 
             <h3>2) Welche drei Grundszenarien liegen zugrunde?</h3>
             <ul>
-              <li><strong>Referenz (A‑00‑2025)</strong>: Referenzhypothesen zu Geburten, Sterblichkeit, Migration.</li>
-              <li><strong>Hohes (B‑00‑2025)</strong>: höhere Annahmen → stärkeres Wachstum.</li>
-              <li><strong>Tiefes (C‑00‑2025)</strong>: tiefere Annahmen → schwächeres Wachstum.</li>
+              <li><strong>Referenz (A‑00‑2025)</strong></li>
+              <li><strong>Hohes (B‑00‑2025)</strong></li>
+              <li><strong>Tiefes (C‑00‑2025)</strong></li>
             </ul>
 
             <h3>3) Wofür steht die dünne schwarze Linie? (leicht verständlich)</h3>
+            <p>Sie zeigt die <strong>Startform 2025</strong>. Die farbigen Flächen zeigen 2055. Kurz: Die Linie ist der <strong>Vergleichspunkt heute vs. Zukunft</strong>.</p>
+          </div>
+
+          <!-- === Single-Choice (Buttons links; Erklärung nur bei Fehler) === -->
+          <div class="pad" id="quiz-single">
+            <span class="pill">Single‑Choice</span>
+            <h2>5 Single‑Choice‑Fragen: Kannst du die Grafik richtig lesen?</h2>
+            <p class="note">Klicke bei jeder Frage auf <em>„Antwort prüfen“</em>. Die Begründung erscheint nur, wenn die Antwort falsch ist.</p>
+
+            <div class="card pad" id="sc-quiz" style="background:#fff">
+              <!-- F1 -->
+              <div class="quiz-item" data-correct="c" style="margin-bottom:14px; padding:12px; border-radius:10px">
+                <p class="font-medium text-lg mb-2">1) Welche Altersgruppe ist bei den <strong>Frauen (rechts)</strong> am stärksten?</p>
+                <label><input type="radio" name="scq1" value="a"> 0–4 Jahre</label><br>
+                <label><input type="radio" name="scq1" value="b"> 20–24 Jahre</label><br>
+                <label><input type="radio" name="scq1" value="c"> 50–59 Jahre (starke Jahrgänge)</label>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                </div>
+                <div class="sc-explain">In den mittleren/älteren Jahrgängen ragen die Balken rechts am weitesten – Babyboom‑Kohorten.</div>
+              </div>
+
+              <!-- F2 -->
+              <div class="quiz-item" data-correct="b" style="margin-bottom:14px; padding:12px; border-radius:10px">
+                <p class="font-medium text-lg mb-2">2) Warum ragen die Balken bei <strong>80+</strong> rechts (Frauen) oft weiter nach außen?</p>
+                <label><input type="radio" name="scq2" value="a"> Höhere Zuwanderung in diesem Alter</label><br>
+                <label><input type="radio" name="scq2" value="b"> Höhere Lebenserwartung der Frauen</label><br>
+                <label><input type="radio" name="scq2" value="c"> Darstellungsfehler</label>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                </div>
+                <div class="sc-explain">Frauen leben im Schnitt länger – daher sind sie in hohen Altersklassen häufiger.</div>
+              </div>
+
+              <!-- F3 -->
+              <div class="quiz-item" data-correct="a" style="margin-bottom:14px; padding:12px; border-radius:10px">
+                <p class="font-medium text-lg mb-2">3) Was bedeutet eine <strong>schmale Basis</strong> (0–14) gegenüber der „Bauch“-Mitte?</p>
+                <label><input type="radio" name="scq3" value="a"> Heute werden weniger Kinder geboren als früher</label><br>
+                <label><input type="radio" name="scq3" value="b"> Sehr hohe Kindersterblichkeit</label><br>
+                <label><input type="radio" name="scq3" value="c"> Sehr starkes Bevölkerungswachstum</label>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                </div>
+                <div class="sc-explain">Schmale Basis = niedrige Geburten relativ zu starken mittleren Jahrgängen.</div>
+              </div>
+
+              <!-- F4 -->
+              <div class="quiz-item" data-correct="b" style="margin-bottom:14px; padding:12px; border-radius:10px">
+                <p class="font-medium text-lg mb-2">4) Welche Grundform trifft die Schweiz aktuell am ehesten?</p>
+                <label><input type="radio" name="scq4" value="a"> Klassische Pyramide (breite Basis)</label><br>
+                <label><input type="radio" name="scq4" value="b"> Urne / Schmetterling (schmale Basis)</label><br>
+                <label><input type="radio" name="scq4" value="c"> Säule (alle Altersgruppen ähnlich)</label>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                </div>
+                <div class="sc-explain">Eher „Urne“: unten schmal, Mitte/oben breiter – Zeichen der Alterung.</div>
+              </div>
+
+              <!-- F5 -->
+              <div class="quiz-item" data-correct="a" style="margin-bottom:14px; padding:12px; border-radius:10px">
+                <p class="font-medium text-lg mb-2">5) Ein Balken ist <strong>links</strong> (Männer) länger als rechts – was heißt das?</p>
+                <label><input type="radio" name="scq5" value="a"> In dieser Altersgruppe gibt es mehr Männer als Frauen</label><br>
+                <label><input type="radio" name="scq5" value="b"> Es wurden mehr Kinder geboren</label><br>
+                <label><input type="radio" name="scq5" value="c"> Die Grafik ist fehlerhaft</label>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                </div>
+                <div class="sc-explain">Links = Männer, rechts = Frauen. Länger links ⇒ zahlenmäßig mehr Männer.</div>
+              </div>
+            </div>
+          </div>
+          <!-- === /Single-Choice === -->
+
+          <!-- Offene Fragen -->
+          <div class="pad" id="quiz">
+            <span class="pill">Offene Fragen</span>
+            <h2>5 offene Fragen zur Interpretation (mit Lösungskontrolle)</h2>
+            <ol>
+              <li>
+                <div class="q">1) Wofür steht die <strong>dünne schwarze Linie</strong> in der Grafik?</div>
+                <textarea id="q1" placeholder="Deine Antwort …"></textarea>
+                <div class="feedback fb-bad" id="fb1"></div>
+                <button type="button" class="btn btn-secondary" data-check="1">Antwort prüfen</button>
+              </li>
+              <li>
+                <div class="q">2) Nenne die <strong>drei Grundszenarien</strong> mit ihren offiziellen <strong>Codes</strong>.</div>
+                <textarea id="q2" placeholder="Deine Antwort …"></textarea>
+                <div class="feedback fb-bad" id="fb2"></div>
+                <button type="button" class="btn btn-secondary" data-check="2">Antwort prüfen</button>
+              </li>
+              <li>
+                <div class="q">3) Welche <strong>drei demografischen Komponenten</strong> bestimmen die Szenarien?</div>
+                <textarea id="q3" placeholder="Deine Antwort …"></textarea>
+                <div class="feedback fb-bad" id="fb3"></div>
+                <button type="button" class="btn btn-secondary" data-check="3">Antwort prüfen</button>
+              </li>
+              <li>
+                <div class="q">4) Welches Szenario führt bis 2055 zum <strong>stärksten Bevölkerungswachstum</strong> – und warum?</div>
+                <textarea id="q4" placeholder="Deine Antwort …"></textarea>
+                <div class="feedback fb-bad" id="fb4"></div>
+                <button type="button" class="btn btn-secondary" data-check="4">Antwort prüfen</button>
+              </li>
+              <li>
+                <div class="q">5) Wie verändert sich die <strong>Form</strong> der Pyramide bis 2055 – und was bedeutet das?</div>
+                <textarea id="q5" placeholder="Deine Antwort …"></textarea>
+                <div class="feedback fb-bad" id="fb5"></div>
+                <button type="button" class="btn btn-secondary" data-check="5">Antwort prüfen</button>
+              </li>
+            </ol>
+
+            <div class="bar">
+              <button type="button" class="btn btn-accent" id="check-all">Alle offenen Fragen prüfen</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ergebnisse für den PDF-Druck -->
+    <section id="quiz-results" style="display:none">
+      <div class="grid">
+        <div class="card two-40-60">
+          <div class="pad">
+            <span class="pill">Ergebnisse</span>
+            <h2>Auswertung – Offene Fragen</h2>
+            <div id="results-container"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6) Cornell-Methode -->
+    <section id="cornell">
+      <div class="grid">
+        <div class="card two-40-60">
+          <div class="pad">
+            <span class="pill">Cornell‑Methode</span>
+            <h2>Eigene Zusammenfassung</h2>
+            <div class="cornell">
+              <div class="column">
+                <h3>💡 Stichworte / Fragen (Cue)</h3>
+                <textarea id="cue" placeholder="Zentrale Begriffe, Fragen …"></textarea>
+              </div>
+              <div class="column">
+                <h3>📝 Notizen</h3>
+                <textarea id="notes" placeholder="Ausführliche Notizen …" style="min-height:280px"></textarea>
+              </div>
+              <div class="column summary">
+                <h3>🧾 Zusammenfassung (3–5 Sätze)</h3>
+                <textarea id="summary" placeholder="Das Wichtigste in Kürze …"></textarea>
+              </div>
+            </div>
+
+            <div class="bar">
+              <button type="button" class="btn btn-accent" onclick="window.print()">Als PDF exportieren</button>
+              <button type="button" class="btn btn-secondary hide-print" id="reset">Felder leeren</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BFS Widget-Script (einmalig, async) -->
+  <script async src="https://viz.bfs.admin.ch/libs/viz-bfs/dynvis/dynvis-v0.8/widget-v1.4/widget.js"></script>
+
+  <script>
+    'use strict';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      /* ========= Single-Choice (Event Delegation) ========= */
+      const scContainer = document.getElementById('sc-quiz');
+      if (scContainer) {
+        scContainer.addEventListener('click', (ev) => {
+          const btn = ev.target.closest('.sc-check-btn');
+          if (!btn) return;
+
+          const item = btn.closest('.quiz-item');
+          if (!item) return;
+
+          const correct = item.getAttribute('data-correct');
+          const selected = item.querySelector('input[type="radio"]:checked');
+          const explain = item.querySelector('.sc-explain');
+
+          // Reset
+          item.classList.remove('ok-card','bad-card');
+          if (explain) explain.style.display = 'none';
+
+          if (!selected) {
+            item.classList.add('bad-card');
+            if (explain) { explain.textContent = 'Bitte wähle zuerst eine Antwort aus.'; explain.style.display = 'block'; }
+            return;
+          }
+          if (selected.value === correct) {
+            item.classList.add('ok-card'); // richtig -> grün
+          } else {
+            item.classList.add('bad-card'); // falsch -> rot + Erklärung
+            if (explain) explain.style.display = 'block';
+          }
+        });
+      }
+
+      /* ========= Offene Fragen ========= */
+      const ANSWERS = {
+        1: {
+          keywords: ["referenz","2025","kontur","linie","vergleich","referenzkontur","startform","heute"],
+          correct: "Die dünne schwarze Linie zeigt die <strong>Startform 2025</strong> und dient als Vergleich zu 2055.",
+          explain: "So kannst du direkt erkennen, wo es künftig mehr/weniger junge, erwachsene oder ältere Menschen geben könnte."
+        },
+        2: {
+          keywords: ["a-00-2025","b-00-2025","c-00-2025","referenz","hoch","tief"],
+          correct: "A‑00‑2025 (Referenz), B‑00‑2025 (hoch), C‑00‑2025 (tief).",
+          explain: "Szenarien kombinieren Annahmen zu Geburten, Sterblichkeit und Migration."
+        },
+        3: {
+          keywords: ["geburten","sterblichkeit","lebenserwartung","migration","einwanderung","auswanderung"],
+          correct: "Geburten, Sterblichkeit (Lebenserwartung), Migration (Ein-/Auswanderung).",
+          explain: "Diese Komponenten bestimmen Größe und Altersstruktur."
+        },
+        4: {
+          keywords: ["b-00-2025","hoch","höher","stärkstes","stärkeren","wachstum"],
+          correct: "B‑00‑2025 (hoch) führt zum stärksten Wachstum.",
+          explain: "Bei Geburten, Lebenserwartung und Nettozuwanderung werden höhere Annahmen getroffen."
+        },
+        5: {
+          keywords: ["urne","tanne","verbreitert","spitze","alterung"],
+          correct: "Die Form verschiebt sich Richtung <strong>Urne</strong> – die Spitze verbreitert sich (Alterung).",
+          explain: "Babyboom‑Kohorten rücken nach oben; steigende Lebenserwartung."
+        }
+      };
+
+      const resultsSection = document.getElementById("quiz-results");
+      const resultsContainer = document.getElementById("results-container");
+
+      function checkKeywords(text, needed) {
+        const t = (text || "").toLowerCase().normalize("NFKD");
+        let hits = 0; for (const k of needed) if (t.includes(k)) hits++;
+        return hits >= Math.min(2, needed.length);
+      }
