@@ -96,7 +96,7 @@
     @media print{
       header, #video, #theorie, #erklaerung, .hide-print, .bar .btn-secondary { display:none !important; }
       #grafik { display:none !important; }
-      #quiz-results, #cornell { display:block !important; }
+      #quiz-results, #cornell { display:block !entlich; }
       body{background:#fff;color:#000}
       .card{box-shadow:none;border-color:var(--print-border)}
       a{color:#000;text-decoration:none}
@@ -128,10 +128,10 @@
             <div class="video card" aria-label="Eingebettetes Erklärvideo des BFS zu Bevölkerungsszenarien">
               <iframe
                 src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
-                title="YouTube video player"
+                title="Bevölkerungsszenarien BFS"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen
-                referrerpolicy="strict-origin-when-cross-origin"></iframe>
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen></iframe>
             </div>
             <p class="note">
               Wird das Video blockiert? <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
@@ -429,44 +429,47 @@
   <script async src="https://viz.bfs.admin.ch/libs/viz-bfs/dynvis/dynvis-v0.8/widget-v1.4/widget.js"></script>
 
   <script>
-    /* === Single-Choice: pro Frage 'Antwort prüfen' – Begründung nur bei Fehler === */
+    /* === Single-Choice: Event Delegation (robust, Buttons links) === */
     (function(){
       const scContainer = document.getElementById('sc-quiz');
       if(!scContainer) return;
 
-      scContainer.querySelectorAll('.quiz-item').forEach((item)=>{
-        const btn = item.querySelector('.sc-check-btn');
-        btn?.addEventListener('click', ()=>{
-          const correct = item.getAttribute('data-correct');
-          const firstRadio = item.querySelector('input[type="radio"]');
-          const groupName = firstRadio ? firstRadio.name : null;
-          const selected = groupName ? item.querySelector(`input[name="${groupName}"]:checked`) : null;
-          const explain = item.querySelector('.sc-explain');
+      scContainer.addEventListener('click', (ev)=>{
+        const btn = ev.target.closest('.sc-check-btn');
+        if(!btn) return;
 
-          // Reset Styles
-          item.classList.remove('ok-card','bad-card');
-          if(explain) explain.style.display = 'none';
+        const item = btn.closest('.quiz-item');
+        if(!item) return;
 
-          if(!selected){
-            item.classList.add('bad-card');
-            if(explain){
-              explain.textContent = 'Bitte wähle zuerst eine Antwort aus.';
-              explain.style.display = 'block';
-            }
-            return;
+        const correct = item.getAttribute('data-correct');
+        const firstRadio = item.querySelector('input[type="radio"]');
+        const groupName = firstRadio ? firstRadio.name : null;
+        const selected = groupName ? item.querySelector(`input[name="${groupName}"]:checked`) : null;
+        const explain = item.querySelector('.sc-explain');
+
+        // Reset Styles
+        item.classList.remove('ok-card','bad-card');
+        if(explain) explain.style.display = 'none';
+
+        if(!selected){
+          item.classList.add('bad-card');
+          if(explain){
+            explain.textContent = 'Bitte wähle zuerst eine Antwort aus.';
+            explain.style.display = 'block';
           }
+          return;
+        }
 
-          if(selected.value === correct){
-            item.classList.add('ok-card'); // richtig -> grün, keine Begründung
-          }else{
-            item.classList.add('bad-card'); // falsch -> rot + Begründung
-            if(explain) explain.style.display = 'block';
-          }
-        });
+        if(selected.value === correct){
+          item.classList.add('ok-card'); // richtig → grün, keine Begründung
+        }else{
+          item.classList.add('bad-card'); // falsch → rot + Begründung
+          if(explain) explain.style.display = 'block';
+        }
       });
     })();
 
-    /* === Offene Fragen – Logik (unverändert) === */
+    /* === Offene Fragen – Logik === */
     const ANSWERS = {
       1: {
         keywords: ["referenz", "2025", "kontur", "linie", "vergleich", "referenzkontur","startform","heute"],
@@ -496,69 +499,3 @@
         explain:
           "Alle drei Komponenten wirken in Richtung größerer Bevölkerung, wodurch die Pyramide breiter (v. a. Basis/Mitte) ausfällt."
       },
-      5: {
-        keywords: ["urne", "tanne", "verbreitert", "spitze", "alterung"],
-        correct:
-          "Die Form verschiebt sich von der <strong>Tanne</strong> zur <strong>Urne</strong>: Die Spitze verbreitert sich – Zeichen einer <strong>raschen Alterung</strong> der Bevölkerung.",
-        explain:
-          "Babyboom‑Kohorten rücken in höhere Alter, zugleich steigt die Lebenserwartung."
-      }
-    };
-
-    function checkKeywords(text, needed) {
-      const t = (text || "").toLowerCase().normalize("NFKD");
-      let hits = 0;
-      for (const k of needed) { if (t.includes(k)) hits++; }
-      return hits >= Math.min(2, needed.length);
-    }
-    function renderFeedback(el, ok, correct, explain) {
-      el.style.display = "block";
-      el.classList.toggle("fb-ok", ok);
-      el.classList.toggle("fb-bad", !ok);
-      el.innerHTML = ok
-        ? "✅ <strong>Richtig!</strong> Gut erkannt."
-        : `❌ <strong>Nicht ganz.</strong><br>Richtig ist: ${correct}<div class="explain">${explain}</div>`;
-    }
-    function getVal(id){ return document.getElementById(id)?.value?.trim() || "" }
-    function checkOne(n){
-      const ans = ANSWERS[n];
-      const field = document.getElementById("q"+n);
-      const fb = document.getElementById("fb"+n);
-      const ok = checkKeywords(field.value, ans.keywords);
-      renderFeedback(fb, ok, ans.correct, ans.explain);
-      updateResults();
-    }
-    document.getElementById("check-all")?.addEventListener("click", () => {
-      [1,2,3,4,5].forEach(checkOne);
-      document.getElementById("quiz-results").style.display = "block";
-      window.scrollTo({top: document.getElementById("quiz-results").offsetTop - 20, behavior: "smooth"});
-    });
-    document.querySelectorAll("button[data-check]").forEach(btn=>{
-      btn.addEventListener("click", ()=> checkOne(parseInt(btn.getAttribute("data-check"), 10)));
-    });
-    function updateResults(){
-      const rc = document.getElementById("results-container");
-      const rows = [1,2,3,4,5].map(n=>{
-        const val = getVal("q"+n);
-        const ok = checkKeywords(val, ANSWERS[n].keywords);
-        const verdict = ok ? "Richtig" : "Korrigiert";
-        const correct = ok ? "" : `<div><em>Lösung:</em> ${ANSWERS[n].correct}<div class="explain">${ANSWERS[n].explain}</div></div>`;
-        return `
-          <div class="card" style="margin:8px 0;background:#fff">
-            <div class="pad">
-              <div style="font-weight:700;margin-bottom:6px">Frage ${n}</div>
-              <div><em>Deine Antwort:</em><br>${val ? val.replace(/\n/g,"<br>") : "<span style='color:#8c98ad'>– (leer) –</span>"}</div>
-              <div style="margin-top:8px"><strong>Ergebnis:</strong> ${verdict}</div>
-              ${correct}
-            </div>
-          </div>
-        `;
-      }).join("");
-      rc.innerHTML = rows;
-      document.getElementById("quiz-results").style.display = "block";
-    }
-    document.getElementById("reset")?.addEventListener("click", ()=>{
-      document.querySelectorAll('textarea, input[type="text"]').forEach(el => { el.value = ''; });
-      document.querySelectorAll('.feedback').forEach(el => { el.style.display='none'; el.classList.remove("fb-ok","fb-bad"); el.innerHTML=''; });
-      document.getElementById("quiz-results").style.display = "none";
-      document.getElementById
