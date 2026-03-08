@@ -84,6 +84,9 @@
     .cornell .summary textarea{min-height:120px}
     .bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:flex-end;margin-top:10px}
 
+    /* Eigene Leiste für Single-Choice -> links ausgerichtet */
+    .sc-bar{display:flex; gap:10px; margin-top:8px; align-items:center; justify-content:flex-start}
+
     @media (min-width: 820px){
       .two-40-60 .cols{grid-template-columns: 5fr 7fr}
       .two-50-50 .cols{grid-template-columns: 1fr 1fr}
@@ -125,11 +128,10 @@
             <div class="video card" aria-label="Eingebettetes Erklärvideo des BFS zu Bevölkerungsszenarien">
               <iframe
                 src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
-                title="BFS: Bevölkerungsszenarien 2025–2055"
+                title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen
-                referrerpolicy="strict-origin-when-cross-origin">
-              </iframe>
+                referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
             <p class="note">
               Wird das Video blockiert? <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
@@ -215,14 +217,14 @@
             </p>
           </div>
 
-          <!-- === Single-Choice (NEU, angepasste Fragen zum Lesen der Grafik) === -->
+          <!-- === Single-Choice (Buttons links & nur bei Fehler Begründung) === -->
           <div class="pad" id="quiz-single">
             <span class="pill">Single‑Choice</span>
             <h2>5 Single‑Choice‑Fragen: Kannst du die Grafik richtig lesen?</h2>
             <p class="note">Klicke bei jeder Frage auf <em>„Antwort prüfen“</em>. Die Begründung erscheint nur, wenn die Antwort falsch ist.</p>
 
             <div class="card pad" id="sc-quiz" style="background:#fff">
-              <!-- F1: stärkste Altersgruppe Frauen -->
+              <!-- F1 -->
               <div class="quiz-item" data-correct="c" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">1) Welche Altersgruppe ist in der Grafik bei den <strong>Frauen (rechts)</strong> am stärksten vertreten?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -234,15 +236,15 @@
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
                   <input type="radio" name="scq1" value="c" style="margin-right:6px;"> 50–59 Jahre (starke Jahrgänge)
                 </label>
-                <div class="bar" style="gap:10px;margin-top:8px;justify-content:flex-start">
-                  <button class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
                 </div>
                 <div class="sc-explain">
                   In der Grafik ragen die Balken bei Frauen in den mittleren/älteren Jahrgängen besonders weit nach rechts – typisch für starke Babyboom‑Kohorten.
                 </div>
               </div>
 
-              <!-- F2: 80+ rechts weiter -->
+              <!-- F2 -->
               <div class="quiz-item" data-correct="b" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">2) Warum ragen die Balken bei <strong>80+</strong> auf der rechten Seite (Frauen) oft weiter nach außen?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -254,15 +256,15 @@
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
                   <input type="radio" name="scq2" value="c" style="margin-right:6px;"> Es ist ein Darstellungsfehler
                 </label>
-                <div class="bar" style="gap:10px;margin-top:8px">
-                  <button class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
                 </div>
                 <div class="sc-explain">
                   Frauen haben eine höhere Lebenserwartung – deshalb gibt es in hohen Altersklassen mehr Frauen als Männer.
                 </div>
               </div>
 
-              <!-- F3: schmale Basis -->
+              <!-- F3 -->
               <div class="quiz-item" data-correct="a" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">3) Was bedeutet eine <strong>schmale Basis</strong> (0–14) im Vergleich zur „Bauch“-Mitte?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -274,15 +276,15 @@
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
                   <input type="radio" name="scq3" value="c" style="margin-right:6px;"> Die Bevölkerung wächst rasant
                 </label>
-                <div class="bar" style="gap:10px;margin-top:8px">
-                  <button class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
                 </div>
                 <div class="sc-explain">
                   Eine schmale Basis zeigt niedrige Geburten im Vergleich zu den starken mittleren Jahrgängen – typisch für „Urnen“-Formen.
                 </div>
               </div>
 
-              <!-- F4: Form der Schweiz -->
+              <!-- F4 -->
               <div class="quiz-item" data-correct="b" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">4) Welcher Grundform entspricht die <strong>aktuelle Schweizer Grafik</strong> am ehesten?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -294,15 +296,15 @@
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
                   <input type="radio" name="scq4" value="c" style="margin-right:6px;"> Säule (alle Altersgruppen ähnlich stark)
                 </label>
-                <div class="bar" style="gap:10px;margin-top:8px">
-                  <button class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
                 </div>
                 <div class="sc-explain">
                   Die Schweiz zeigt eher eine „Urnen“-Form: unten schmal, in der Mitte/oben breiter – Zeichen der Alterung.
                 </div>
               </div>
 
-              <!-- F5: Links vs. rechts lesen -->
+              <!-- F5 -->
               <div class="quiz-item" data-correct="a" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">5) Was bedeutet es, wenn ein Balken <strong>links</strong> (Männer) in einer Altersgruppe <strong>länger</strong> ist als rechts?</p>
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
@@ -314,8 +316,8 @@
                 <label style="display:block; padding:6px 8px; border-radius:8px; cursor:pointer;">
                   <input type="radio" name="scq5" value="c" style="margin-right:6px;"> Die Grafik ist fehlerhaft
                 </label>
-                <div class="bar" style="gap:10px;margin-top:8px">
-                  <button class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
+                <div class="sc-bar">
+                  <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
                 </div>
                 <div class="sc-explain">
                   Links stehen die Männer, rechts die Frauen. Ein längerer Balken links bedeutet: In dieser Altersgruppe sind mehr Männer als Frauen.
@@ -325,7 +327,7 @@
           </div>
           <!-- === /Single-Choice === -->
 
-          <!-- Offene Fragen (bestehend) -->
+          <!-- Offene Fragen -->
           <div class="pad" id="quiz">
             <span class="pill">Offene Fragen</span>
             <h2>5 offene Fragen zur Interpretation (mit Lösungskontrolle)</h2>
@@ -427,12 +429,11 @@
   <script async src="https://viz.bfs.admin.ch/libs/viz-bfs/dynvis/dynvis-v0.8/widget-v1.4/widget.js"></script>
 
   <script>
-    /* === Single-Choice: pro Frage 'Antwort prüfen' mit verzögerter Begründung nur bei Fehler === */
+    /* === Single-Choice: pro Frage 'Antwort prüfen' – Begründung nur bei Fehler === */
     (function(){
       const scContainer = document.getElementById('sc-quiz');
       if(!scContainer) return;
 
-      // pro Frage eigener Prüfen-Button
       scContainer.querySelectorAll('.quiz-item').forEach((item)=>{
         const btn = item.querySelector('.sc-check-btn');
         btn?.addEventListener('click', ()=>{
@@ -447,28 +448,25 @@
           if(explain) explain.style.display = 'none';
 
           if(!selected){
-            // Keine Auswahl → nur dezent markieren
             item.classList.add('bad-card');
             if(explain){
-              explain.innerHTML = 'Bitte wähle zuerst eine Antwort aus.';
+              explain.textContent = 'Bitte wähle zuerst eine Antwort aus.';
               explain.style.display = 'block';
             }
             return;
           }
 
           if(selected.value === correct){
-            // Richtig: grün markieren, KEINE Begründung zeigen
-            item.classList.add('ok-card');
+            item.classList.add('ok-card'); // richtig -> grün, keine Begründung
           }else{
-            // Falsch: rot markieren, Begründung zeigen
-            item.classList.add('bad-card');
+            item.classList.add('bad-card'); // falsch -> rot + Begründung
             if(explain) explain.style.display = 'block';
           }
         });
       });
     })();
 
-    /* === Offene Fragen – vorhandene Logik === */
+    /* === Offene Fragen – Logik (unverändert) === */
     const ANSWERS = {
       1: {
         keywords: ["referenz", "2025", "kontur", "linie", "vergleich", "referenzkontur","startform","heute"],
@@ -563,7 +561,4 @@
       document.querySelectorAll('textarea, input[type="text"]').forEach(el => { el.value = ''; });
       document.querySelectorAll('.feedback').forEach(el => { el.style.display='none'; el.classList.remove("fb-ok","fb-bad"); el.innerHTML=''; });
       document.getElementById("quiz-results").style.display = "none";
-      document.getElementById("results-container").innerHTML = "";
-      window.scrollTo({top:0, behavior:"smooth"});
-    });
-    window.add
+      document.getElementById
