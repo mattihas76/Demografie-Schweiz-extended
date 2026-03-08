@@ -126,11 +126,11 @@
             <div class="video card" aria-label="Eingebettetes Erklärvideo des BFS zu Bevölkerungsszenarien">
               <iframe
                 src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
-                title="YouTube video player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                title="BFS-Bevölkerungsszenarien"
                 referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen
-              ></iframe>
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+              </iframe>
             </div>
             <p class="note">
               Wird das Video blockiert? <a href="https://www.youtube.com/watch?v=vkWtNt-Y6PI" target="_blank" rel="noopener">Direkt auf YouTube öffnen</a>.
@@ -248,13 +248,13 @@
               <!-- F3 -->
               <div class="quiz-item" data-correct="a" style="margin-bottom:14px; padding:12px; border-radius:10px">
                 <p class="font-medium text-lg mb-2">3) Was bedeutet eine <strong>schmale Basis</strong> (0–14) gegenüber der „Bauch“-Mitte?</p>
-                <label><input type="radio" name="scq3" value="a"> Heute werden weniger Kinder geboren als früher</label><br>
+                <label><input type="radio" name="scq3" value="a"> Heute werden weniger Kinder geboren als in früheren Kohorten</label><br>
                 <label><input type="radio" name="scq3" value="b"> Sehr hohe Kindersterblichkeit</label><br>
                 <label><input type="radio" name="scq3" value="c"> Sehr starkes Bevölkerungswachstum</label>
                 <div class="sc-bar">
                   <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
                 </div>
-                <div class="sc-explain">Schmale Basis = niedrige Geburten relativ zu starken mittleren Jahrgängen.</div>
+                <div class="sc-explain">Schmale Basis = niedrige Geburten relativ zu den starken mittleren Jahrgängen.</div>
               </div>
 
               <!-- F4 -->
@@ -406,9 +406,9 @@
             return;
           }
           if (selected.value === correct) {
-            item.classList.add('ok-card'); // richtig -> grün
+            item.classList.add('ok-card');   // richtig → grün, keine Begründung
           } else {
-            item.classList.add('bad-card'); // falsch -> rot + Erklärung
+            item.classList.add('bad-card');  // falsch → rot + Begründung
             if (explain) explain.style.display = 'block';
           }
         });
@@ -451,3 +451,80 @@
         let hits = 0; for (const k of needed) if (t.includes(k)) hits++;
         return hits >= Math.min(2, needed.length);
       }
+      function renderFeedback(el, ok, correct, explain) {
+        el.style.display = "block";
+        el.classList.toggle("fb-ok", ok);
+        el.classList.toggle("fb-bad", !ok);
+        el.innerHTML = ok
+          ? "✅ <strong>Richtig!</strong> Gut erkannt."
+          : `❌ <strong>Nicht ganz.</strong><br>Richtig ist: ${correct}<div class="explain">${explain}</div>`;
+      }
+      function getVal(id){ return document.getElementById(id)?.value?.trim() || "" }
+
+      function checkOne(n){
+        const ans = ANSWERS[n];
+        const field = document.getElementById("q"+n);
+        const fb = document.getElementById("fb"+n);
+        const ok = checkKeywords(field.value, ans.keywords);
+        renderFeedback(fb, ok, ans.correct, ans.explain);
+        updateResults();
+      }
+
+      // Delegation: Offene-Fragen-Buttons
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('button[data-check]');
+        if (!btn) return;
+        const n = parseInt(btn.getAttribute('data-check'), 10);
+        if (!isNaN(n)) checkOne(n);
+      });
+
+      const checkAll = document.getElementById("check-all");
+      if (checkAll) {
+        checkAll.addEventListener("click", () => {
+          [1,2,3,4,5].forEach(checkOne);
+          if (resultsSection) resultsSection.style.display = "block";
+          const y = resultsSection.getBoundingClientRect().top + window.scrollY - 20;
+          window.scrollTo({top:y, behavior:"smooth"});
+        });
+      }
+
+      function updateResults(){
+        if (!resultsContainer) return;
+        const rows = [1,2,3,4,5].map(n=>{
+          const val = getVal("q"+n);
+          const ok = checkKeywords(val, ANSWERS[n].keywords);
+          const verdict = ok ? "Richtig" : "Korrigiert";
+          const correct = ok ? "" : `<div><em>Lösung:</em> ${ANSWERS[n].correct}<div class="explain">${ANSWERS[n].explain}</div></div>`;
+          return `
+            <div class="card" style="margin:8px 0;background:#fff">
+              <div class="pad">
+                <div style="font-weight:700;margin-bottom:6px">Frage ${n}</div>
+                <div><em>Deine Antwort:</em><br>${val ? val.replace(/\n/g,"<br>") : "<span style='color:#8c98ad'>– (leer) –</span>"}</div>
+                <div style="margin-top:8px"><strong>Ergebnis:</strong> ${verdict}</div>
+                ${correct}
+              </div>
+            </div>
+          `;
+        }).join("");
+        resultsContainer.innerHTML = rows;
+        if (resultsSection) resultsSection.style.display = "block";
+      }
+
+      const resetBtn = document.getElementById("reset");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", ()=>{
+          document.querySelectorAll('textarea, input[type="text"]').forEach(el => { el.value = ''; });
+          document.querySelectorAll('.feedback').forEach(el => {
+            el.style.display='none'; el.classList.remove("fb-ok","fb-bad"); el.innerHTML='';
+          });
+          if (resultsSection) resultsSection.style.display = "none";
+          if (resultsContainer) resultsContainer.innerHTML = "";
+          window.scrollTo({top:0, behavior:"smooth"});
+        });
+      }
+
+      window.addEventListener("beforeprint", ()=>{ updateResults(); });
+    });
+  </script>
+</body>
+</html>
