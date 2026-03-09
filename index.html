@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Bevölkerungsentwicklung & Schmetterlingsgrafik (Alterspyramide)</title>
-  <meta name="description" content="Video, Theorie, interaktive BFS-Grafik (Widget), Single-Choice-Quiz mit 'Antwort prüfen', offene Fragen, Cornell-Methode mit PDF-Export." />
+  <meta name="description" content="Video, Theorie, interaktive BFS-Grafik (Widget), Single-Choice-Quiz mit 'Antwort prüfen' und 'Alle prüfen', offene Fragen, Cornell-Methode, PDF-Export." />
   <!-- Für stabilere YouTube-Einbettung -->
   <meta name="referrer" content="strict-origin-when-cross-origin" />
 
@@ -84,6 +84,8 @@
 
     /* Eigene Leiste für Single-Choice -> links ausgerichtet */
     .sc-bar{display:flex; gap:10px; margin-top:8px; align-items:center; justify-content:flex-start}
+    .sc-footer{display:flex; gap:10px; align-items:center; justify-content:flex-start; margin-top:14px}
+    .sc-inline-result{color:#184c86; font-weight:600}
 
     @media (min-width: 820px){
       .two-40-60 .cols{grid-template-columns: 5fr 7fr}
@@ -108,7 +110,7 @@
   <header>
     <div class="wrap">
       <h1>Schmetterlingsgrafik (Alterspyramide) &amp; Bevölkerungsentwicklung</h1>
-      <p class="sub">Video, Theorie, <strong>interaktive BFS‑Grafik (Widget)</strong>, Single‑Choice‑Quiz (mit „Antwort prüfen“), offene Fragen &amp; Cornell‑Methode – inkl. PDF‑Export.</p>
+      <p class="sub">Video, Theorie, <strong>interaktive BFS‑Grafik (Widget)</strong>, Single‑Choice‑Quiz (mit „Antwort prüfen“ / „Alle prüfen“), offene Fragen &amp; Cornell‑Methode – inkl. PDF‑Export.</p>
     </div>
   </header>
 
@@ -127,8 +129,9 @@
               <iframe
                 src="https://www.youtube-nocookie.com/embed/vkWtNt-Y6PI"
                 title="BFS: Bevölkerungsszenarien"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                loading="lazy"
                 referrerpolicy="strict-origin-when-cross-origin"
+                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen></iframe>
             </div>
             <p class="note">
@@ -217,7 +220,7 @@
           <div class="pad" id="quiz-single">
             <span class="pill">Single‑Choice</span>
             <h2>5 Single‑Choice‑Fragen: Kannst du die Grafik richtig lesen?</h2>
-            <p class="note">Klicke bei jeder Frage auf <em>„Antwort prüfen“</em>. Die Begründung erscheint nur, wenn die Antwort falsch ist.</p>
+            <p class="note">Klicke pro Frage auf <em>„Antwort prüfen“</em> oder nutze <em>„Alle prüfen“</em>. Die Begründung erscheint nur, wenn die Antwort falsch ist.</p>
 
             <div class="card pad" id="sc-quiz" style="background:#fff">
               <!-- F1 -->
@@ -278,6 +281,12 @@
                   <button type="button" class="btn btn-secondary sc-check-btn">Antwort prüfen</button>
                 </div>
                 <div class="sc-explain">Links = Männer, rechts = Frauen. Länger links ⇒ zahlenmäßig mehr Männer.</div>
+              </div>
+
+              <!-- NEU: Alle prüfen + Kurzresultat -->
+              <div class="sc-footer">
+                <button type="button" id="sc-check-all" class="btn btn-accent">Alle Single‑Choice prüfen</button>
+                <span id="sc-inline-result" class="sc-inline-result" aria-live="polite"></span>
               </div>
             </div>
           </div>
@@ -397,35 +406,53 @@
 
       /* ========= Single-Choice (Event Delegation) ========= */
       const scContainer = document.getElementById('sc-quiz');
+      const scInlineResult = document.getElementById('sc-inline-result');
+
+      function evaluateItem(item){
+        const correct = item.getAttribute('data-correct');
+        const selected = item.querySelector('input[type="radio"]:checked');
+        const explain = item.querySelector('.sc-explain');
+
+        // Reset
+        item.classList.remove('ok-card','bad-card');
+        if (explain) explain.style.display = 'none';
+
+        if (!selected) {
+          item.classList.add('bad-card');
+          if (explain) { explain.textContent = 'Bitte wähle zuerst eine Antwort aus.'; explain.style.display = 'block'; }
+          return false;
+        }
+        if (selected.value === correct) {
+          item.classList.add('ok-card');   // richtig → grün, keine Begründung
+          return true;
+        } else {
+          item.classList.add('bad-card');  // falsch → rot + Begründung
+          if (explain) explain.style.display = 'block';
+          return false;
+        }
+      }
+
+      // Einzelprüfung per Button in jeder Frage
       if (scContainer) {
         scContainer.addEventListener('click', (ev) => {
           const btn = ev.target.closest('.sc-check-btn');
           if (!btn) return;
-
           const item = btn.closest('.quiz-item');
           if (!item) return;
-
-          const correct = item.getAttribute('data-correct');
-          const selected = item.querySelector('input[type="radio"]:checked');
-          const explain = item.querySelector('.sc-explain');
-
-          // Reset
-          item.classList.remove('ok-card','bad-card');
-          if (explain) explain.style.display = 'none';
-
-          if (!selected) {
-            item.classList.add('bad-card');
-            if (explain) { explain.textContent = 'Bitte wähle zuerst eine Antwort aus.'; explain.style.display = 'block'; }
-            return;
-          }
-          if (selected.value === correct) {
-            item.classList.add('ok-card');   // richtig → grün, keine Begründung
-          } else {
-            item.classList.add('bad-card');  // falsch → rot + Begründung
-            if (explain) explain.style.display = 'block';
-          }
+          const ok = evaluateItem(item);
+          if (scInlineResult) scInlineResult.textContent = ok ? '✓ Antwort korrekt' : '✗ Korrigiert – siehe Erklärung';
         });
       }
+
+      // NEU: Alle Single‑Choice prüfen
+      const scCheckAllBtn = document.getElementById('sc-check-all');
+      function evaluateAllSC(){
+        const items = Array.from(document.querySelectorAll('#sc-quiz .quiz-item'));
+        let score = 0;
+        items.forEach(item => { if (evaluateItem(item)) score++; });
+        if (scInlineResult) scInlineResult.textContent = `Ergebnis: ${score} von ${items.length} richtig`;
+      }
+      scCheckAllBtn?.addEventListener('click', evaluateAllSC);
 
       /* ========= Offene Fragen ========= */
       const ANSWERS = {
@@ -527,7 +554,7 @@
         if (resultsSection) resultsSection.style.display = "block";
       }
 
-      /* Single-Choice: PDF-Block befüllen (NEU) */
+      /* Single-Choice: PDF-Block befüllen */
       function updateSCResults(){
         if (!scResultsContainer) return;
 
@@ -594,6 +621,7 @@
           });
           if (scResultsSection) scResultsSection.style.display = "none";
           if (scResultsContainer) scResultsContainer.innerHTML = "";
+          if (scInlineResult) scInlineResult.textContent = "";
 
           window.scrollTo({top:0, behavior:"smooth"});
         });
